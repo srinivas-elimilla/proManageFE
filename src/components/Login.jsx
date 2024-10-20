@@ -1,38 +1,28 @@
 import React, { useState } from "react";
-import { useRegisterUserMutation } from "../api";
+import { useLoginUserMutation } from "../api";
 import { toast } from "react-toastify";
 import styles from "../module-style/register.module.css";
 import robotIcon from "../assets/icons/robot.svg";
 import emailIcon from "../assets/icons/email.svg";
-import userIcon from "../assets/icons/user.svg";
 import lockIcon from "../assets/icons/lock.svg";
 import viewIcon from "../assets/icons/view.svg";
 import viewSlashIcon from "../assets/icons/viewslash.svg";
 import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const Login = () => {
   const navigate = useNavigate();
-  const [registerUser, { isLoading }] = useRegisterUserMutation();
+  const [loginUser, { isLoading }] = useLoginUserMutation();
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState({
-    name: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
   const [viewPasswordToggle, setViewPasswordToggle] = useState(false);
-  const [viewCfmPasswordToggle, setViewCfmPasswordToggle] = useState(false);
-
-  // Regex patterns for validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; // Minimum 8 characters, 1 letter, and 1 number
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -42,30 +32,17 @@ const Register = () => {
   const validateForm = () => {
     let valid = true;
     const newErrors = {
-      name: "",
       email: "",
       password: "",
-      confirmPassword: "",
     };
 
-    if (!formData.name) {
-      newErrors.name = "Name is required.";
+    if (!formData.email) {
+      newErrors.email = "Email is required";
       valid = false;
     }
 
-    if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Invalid email format.";
-      valid = false;
-    }
-
-    if (!passwordRegex.test(formData.password)) {
-      newErrors.password =
-        "Password must be at least 8 characters long and contain both letters and numbers.";
-      valid = false;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match.";
+    if (!formData.password) {
+      newErrors.password = "Password  is required";
       valid = false;
     }
 
@@ -79,18 +56,16 @@ const Register = () => {
     if (!validateForm()) return;
 
     try {
-      const res = await registerUser({
-        name: formData.name,
+      const res = await loginUser({
         email: formData.email,
         password: formData.password,
       }).unwrap();
-      console.log(res);
 
       toast.success(res?.message);
-      navigate("/login");
+      navigate("/dashboard");
     } catch (err) {
       toast.error(err?.data?.message);
-      console.error("Failed to register", err);
+      console.error("Failed to login", err);
     }
   };
 
@@ -98,28 +73,15 @@ const Register = () => {
     <div className={styles.container}>
       <div className={styles.imageSection}>
         <div className={styles.circle}></div>
-        <img src={robotIcon} alt="Register" />
+        <img src={robotIcon} alt="Login" />
         <div className={styles.welcome}>
           <h1>Welcome aboard my friend</h1>
           <p>Just a couple of clicks and we start</p>
         </div>
       </div>
       <div className={styles.formSection}>
-        <h1>Register</h1>
+        <h1>Login</h1>
         <form onSubmit={handleSubmit}>
-          <div className={styles.inputContainer}>
-            <div className={styles.formGroup}>
-              <img src={userIcon} alt="Name Icon" className={styles.icon} />
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                value={formData.name}
-                onChange={handleInputChange}
-              />
-            </div>
-            {errors.name && <p className={styles.error}>{errors.name}</p>}
-          </div>
           <div className={styles.inputContainer}>
             <div className={styles.formGroup}>
               <img src={emailIcon} alt="Email Icon" className={styles.icon} />
@@ -160,44 +122,19 @@ const Register = () => {
               <span className={styles.error}>{errors.password}</span>
             )}
           </div>
-          <div className={styles.inputContainer}>
-            <div className={styles.formGroup}>
-              <img
-                src={lockIcon}
-                alt="Confirm Password Icon"
-                className={styles.icon}
-              />
-              <input
-                type={viewCfmPasswordToggle ? "text" : "password"}
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-              />
-              <img
-                src={viewCfmPasswordToggle ? viewSlashIcon : viewIcon}
-                alt="Confirm Password Icon"
-                className={(styles.icon, styles.eye)}
-                onClick={() => setViewCfmPasswordToggle(!viewCfmPasswordToggle)}
-              />
-            </div>
-            {errors.confirmPassword && (
-              <p className={styles.error}>{errors.confirmPassword}</p>
-            )}
-          </div>
           <div className={styles.btnGropu}>
             <button type="submit" disabled={isLoading}>
-              {isLoading ? "Registering..." : "Register"}
+              {isLoading ? "Login..." : "Login"}
             </button>
             <div>
-              <p className={styles.pTag}>Have an account?</p>
+              <p className={styles.pTag}>Have no account yet?</p>
             </div>
             <button
               type="button"
               className={styles.transButton}
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/")}
             >
-              Login
+              Register
             </button>
           </div>
         </form>
@@ -206,4 +143,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
