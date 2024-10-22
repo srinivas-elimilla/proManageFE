@@ -7,15 +7,18 @@ import database from "../assets/icons/database.svg";
 import layout from "../assets/icons/layout.svg";
 import settings from "../assets/icons/settings.svg";
 import logout from "../assets/icons/logout.svg";
+import Board from "../dashboard/Board";
+import Analytics from "../dashboard/Analytics";
+import Settings from "../dashboard/Settings";
 
 const DashboardContent = ({ activeTab }) => {
   switch (activeTab) {
     case "0":
-      return <h1>This is the Board content.</h1>;
+      return <Board />;
     case "1":
-      return <h1>This is the Board content.</h1>;
+      return <Analytics />;
     case "2":
-      return <h1>This is the Settings content.</h1>;
+      return <Settings />;
     default:
       return null;
   }
@@ -61,7 +64,13 @@ export const Dashboard = () => {
             </li>
           </ul>
         </nav>
-        <p className={styles.logout}>
+        <p
+          className={styles.logout}
+          onClick={() => {
+            localStorage.removeItem("token");
+            navigate("/login");
+          }}
+        >
           <img src={logout} alt="logout" />
           Log Out
         </p>

@@ -7,9 +7,10 @@
 .sidebar {
   background-color: #ffff;
   color: white;
-  width: 15%;
+  width: 12.5%;
   display: flex;
   flex-direction: column;
+  border-right: 1px solid #edf5fe;
 }
 
 .logout {
@@ -24,6 +25,8 @@
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   cursor: pointer;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .logout:hover {
@@ -35,7 +38,8 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  padding-top: 1rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .logo p {
@@ -56,8 +60,6 @@
   justify-content: center;
   color: #000000;
   gap: 1rem;
-  margin-top: 1rem;
-  width: 100%;
   padding: 1rem;
 }
 
@@ -74,24 +76,17 @@
 
 .content {
   flex: 1;
-  padding: 40px;
-  background-color: #ecf0f1;
+  padding-top: 1.5rem;
+  padding-left: 4rem;
+  background-color: #ffff;
   overflow-y: auto;
 }
 
-@media (max-width: 1024px) {
-  .dashboardContainer {
-    flex-direction: column;
-  }
-
+@media (min-width: 768px) and (max-width: 1024px) {
   .sidebar {
-    width: 100%;
-    height: auto;
-    flex-direction: row;
-    justify-content: space-around;
+    width: 23%;
   }
-
   .content {
-    padding: 20px;
+    width: 100%;
   }
 }

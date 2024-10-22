@@ -29,6 +29,11 @@ export const api = createApi({
         body: user,
       }),
     }),
+    getUser: builder.query({
+      query: (id) => ({
+        url: `/auth/get/${id}`,
+      }),
+    }),
     updateUser: builder.mutation({
       query: (user) => ({
         url: "/auth/update",
