@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl =
   process.env.NODE_ENV === "production"
-    ? process.env.PROD_URL
+    ? "https://taskmanager-rkqg.onrender.com"
     : "http://localhost:3000";
 
 export const api = createApi({
