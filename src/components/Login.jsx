@@ -8,9 +8,12 @@ import lockIcon from "../assets/icons/lock.svg";
 import viewIcon from "../assets/icons/view.svg";
 import viewSlashIcon from "../assets/icons/viewslash.svg";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../slices/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loginUser, { isLoading }] = useLoginUserMutation();
   const [formData, setFormData] = useState({
     email: "",
@@ -62,6 +65,8 @@ const Login = () => {
       }).unwrap();
 
       toast.success(res?.message);
+      localStorage.setItem("token", res.token);
+      dispatch(setCredentials({ user: res, token: res.token }));
       navigate("/dashboard");
     } catch (err) {
       toast.error(err?.data?.message);
