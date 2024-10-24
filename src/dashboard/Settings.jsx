@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "../module-style/settings.module.css";
 import { useUpdateUserMutation } from "../api";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 const Settings = () => {
   const user = useSelector((state) => state.auth.user);
@@ -16,8 +17,8 @@ const Settings = () => {
   const navigate = useNavigate();
   const [updateUser, { isLoading }] = useUpdateUserMutation();
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+    name: "" || user?.name,
+    email: "" || user?.email,
     oldPassword: "",
     newPassword: "",
   });
@@ -46,12 +47,22 @@ const Settings = () => {
       newPassword: "",
     };
 
-    if (!emailRegex.test(formData.email)) {
+    if (formData.email && !emailRegex.test(formData.email)) {
       newErrors.email = "Invalid email format.";
       valid = false;
     }
 
-    if (!passwordRegex.test(formData.newPassword)) {
+    if (formData.newPassword && !formData.oldPassword) {
+      newErrors.oldPassword = "Old Password is required";
+      valid = false;
+    }
+
+    if (formData.oldPassword && !formData.newPassword) {
+      newErrors.newPassword = "New Password is required";
+      valid = false;
+    }
+
+    if (formData.newPassword && !passwordRegex.test(formData.newPassword)) {
       newErrors.newPassword =
         "Password must be at least 8 characters long and contain both letters and numbers.";
       valid = false;
@@ -73,10 +84,13 @@ const Settings = () => {
         oldPassword: formData.oldPassword,
         newPassword: formData.newPassword,
       }).unwrap();
-      console.log("res in settings >>>>>", res);
+      // console.log("res in settings >>>>>", res);
 
       toast.success(res?.message);
-      //   navigate("/login");
+      if (res?.logout) {
+        localStorage.removeItem("token");
+        navigate("/login");
+      }
     } catch (err) {
       toast.error(err?.data?.message);
       console.error("Failed to update", err);
@@ -123,9 +137,9 @@ const Settings = () => {
                 />
                 <input
                   type={viewPasswordToggle ? "text" : "password"}
-                  name="password"
+                  name="oldPassword"
                   placeholder="Old Password"
-                  value={formData.password}
+                  value={formData.oldPassword}
                   onChange={handleInputChange}
                 />
                 <img

@@ -149,7 +149,11 @@ button {
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
-  .imageSection {
-    display: none;
+  .imageSection img {
+    width: 150px;
+  }
+  .circle {
+    width: 200px;
+    height: 200px;
   }
 }

@@ -78,6 +78,7 @@
   flex: 1;
   padding-top: 1.5rem;
   padding-left: 4rem;
+  padding-right: 2rem;
   background-color: #ffff;
   overflow-y: auto;
 }
@@ -88,5 +89,11 @@
   }
   .content {
     width: 100%;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1920px) {
+  .sidebar {
+    width: 15%;
   }
 }

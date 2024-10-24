@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRegisterUserMutation } from "../api";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import styles from "../module-style/register.module.css";
 import robotIcon from "../assets/icons/robot.svg";
 import emailIcon from "../assets/icons/email.svg";
