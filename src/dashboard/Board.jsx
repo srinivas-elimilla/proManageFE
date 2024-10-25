@@ -6,13 +6,19 @@ import addIcon from "../assets/icons/add.svg";
 import styles from "../module-style/board.module.css";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import CreateTaskModal from "../components/modals/CreateTaskModal";
 
 const Board = () => {
   const user = useSelector((state) => state.auth.user);
   console.log("user in board >>>>>>>", user);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
-    <div>
+    <div className={styles.container}>
       <div className={styles.userDetails}>
         <p>Welcome! {user?.name || ""}</p>
         <p className={styles.date}>{moment().format("Do MMM, YYYY")}</p>
@@ -40,7 +46,7 @@ const Board = () => {
           <div className={styles.cardHeader}>
             <p>To do</p>
             <div>
-              <img src={addIcon} alt="collapse" /> &nbsp;
+              <img src={addIcon} alt="collapse" onClick={openModal} /> &nbsp;
               <img src={collapseIcon} alt="collapse" />
             </div>
           </div>
@@ -58,6 +64,7 @@ const Board = () => {
           </div>
         </div>
       </div>
+      {isModalOpen && <CreateTaskModal onClose={closeModal} />}
     </div>
   );
 };

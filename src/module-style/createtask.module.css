@@ -1,0 +1,233 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 22px;
+  width: 40%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1rem;
+  flex-direction: column;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+.title label {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.title input {
+  border: 1px solid #4d40551a;
+  max-width: 100%;
+  box-shadow: 0 1px 1px #4d40551a;
+  border-radius: 5px;
+}
+
+.title input::placeholder {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #9b959f;
+}
+
+.priority {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  width: 100%;
+}
+
+.priority p {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+.btnGroup {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1rem;
+  width: 80%;
+}
+
+.priority button {
+  background-color: #ffff;
+  color: #767575;
+  font-size: 12px;
+  width: 180px;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  position: relative;
+}
+
+.priority button span {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  left: 15%;
+  top: 40%;
+}
+
+.checklist {
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.checklist p {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.checklistItem {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-top: 10px;
+}
+.checkbox {
+  width: 18px;
+  height: 18px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: white;
+  border: 2px solid #e2e2e2;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+}
+
+.checkbox:checked {
+  background-color: #18b0ff;
+  border: 1px solid #18b0ff;
+}
+
+.checkbox:checked::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 5px;
+  width: 4px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checklistInput ::placeholder {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+}
+.deleteIcon {
+  margin-left: auto;
+}
+
+.addBtn {
+  background-color: #ffff;
+  color: #767575;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.addBtn img {
+  width: 16px;
+  height: 16px;
+}
+
+.createTaskButtons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.dueDate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 50px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #e2e2e2;
+  position: relative;
+}
+.empty {
+  color: transparent;
+}
+
+.empty::before {
+  content: "Select Due Date";
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #707070;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.formBtns {
+  display: flex;
+  gap: 1rem;
+  width: 50%;
+  padding-bottom: 1rem;
+}
+
+.cancelBtn,
+.saveBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 170px;
+  height: 45px;
+  border-radius: 12px;
+  text-align: center;
+}
+.cancelBtn {
+  border: 1px solid #cf3636;
+  color: #cf3636;
+  background-color: #fff;
+}
+.saveBtn {
+  border: 1px solid #17a2b8;
+  color: #fff;
+  background-color: #17a2b8;
+}
