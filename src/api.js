@@ -46,6 +46,18 @@ export const api = createApi({
         body: user,
       }),
     }),
+    getUsers: builder.query({
+      query: (id) => ({
+        url: `/auth/all`,
+      }),
+    }),
+    createTask: builder.mutation({
+      query: (payload) => ({
+        url: "/task/create",
+        method: "POST",
+        body: payload,
+      }),
+    }),
   }),
 });
 
@@ -53,4 +65,5 @@ export const {
   useRegisterUserMutation,
   useLoginUserMutation,
   useUpdateUserMutation,
+  useCreateTaskMutation,
 } = api;
