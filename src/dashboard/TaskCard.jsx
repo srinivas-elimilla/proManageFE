@@ -38,16 +38,22 @@ const TaskCard = ({ tasks, arrowToggle }) => {
   const closeModal = () => setEditModal(false);
 
   const handleShareTask = async (task) => {
+    if (!navigator.share) {
+      toast.error("sharing is not supported!");
+      return;
+    }
+
     const shareData = {
-      task,
+      title: task.title,
       text: `Check out this task: ${task.title}`,
       url: `${baseUrl}/${task._id}`,
     };
+
     try {
       await navigator.share(shareData);
-      toast.success("link copied");
+      toast.success("Task shared successfully!");
     } catch (error) {
-      toast.error("error sharing task!");
+      toast.error("Error sharing task!");
       console.log(error);
     }
   };
