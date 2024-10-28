@@ -59,9 +59,15 @@ export const api = createApi({
     }),
     getTasks: builder.query({
       query: (query) => ({
-        url: `/task/all`,
+        url: `/task/all?filter=${query}`,
       }),
       providesTags: ["tasks"],
+    }),
+    getTask: builder.query({
+      query: (query) => ({
+        url: `/task/${query}`,
+      }),
+      invalidatesTags: ["tasks"],
     }),
     updateTask: builder.mutation({
       query: (payload) => ({
@@ -98,4 +104,5 @@ export const {
   useUpdateTaskMutation,
   useDeleteTaskMutation,
   useGetAnalyticsQuery,
+  useGetTaskQuery,
 } = api;

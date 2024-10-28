@@ -13,7 +13,7 @@ import { taskCategories } from "../utils/constants";
 const Board = () => {
   const user = useSelector((state) => state.auth.user);
   const [filter, setFilter] = useState("week");
-  const { data: allTasks = [] } = useGetTasksQuery();
+  const { data: allTasks = [] } = useGetTasksQuery(filter);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [arrowToggles, setArrowToggles] = useState({
     backlog: true,
