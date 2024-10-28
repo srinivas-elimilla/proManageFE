@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCreateTaskMutation } from "../../api";
+import { useCreateTaskMutation, useGetUsersQuery } from "../../api";
 import styles from "../../module-style/createtask.module.css";
 import deleteIcon from "../../assets/icons/delete.svg";
 import addIcon from "../../assets/icons/add.svg";
@@ -16,9 +16,11 @@ const CreateTaskModal = ({ onClose }) => {
   const [createTask] = useCreateTaskMutation();
   const [isOpen, setIsOpen] = useState(false);
 
+  const { data: usersData } = useGetUsersQuery();
+
   const toggleDropdown = () => setIsOpen(!isOpen);
   const handleSelect = (user) => {
-    setAssignedTo(user);
+    setAssignedTo(user?.email);
     setIsOpen(false);
   };
 
@@ -104,7 +106,6 @@ const CreateTaskModal = ({ onClose }) => {
       console.error("Error creating task:", error);
     }
   };
-  const users = [{ id: "1", name: "sri@gmail.com" }];
   return (
     <div className={styles.container} onClick={handleClickOutsideModal}>
       <div className={styles.modal}>
@@ -174,19 +175,19 @@ const CreateTaskModal = ({ onClose }) => {
               onClick={toggleDropdown}
             >
               <div className={styles.customSelect}>
-                {assignedTo ? assignedTo.name : "Add a assignee"}
+                {assignedTo ? assignedTo : "Add a assignee"}
               </div>
               <div className={styles.customDropdown}>
-                {users.map((user) => (
+                {usersData?.users?.map((user) => (
                   <div
-                    key={user.id}
+                    key={user._id}
                     className={styles.dropdownOption}
                     onClick={() => handleSelect(user)}
                   >
                     <span className={styles.iconBadge}>
-                      {user.name.slice(0, 2)}
+                      {user.email.slice(0, 2)}
                     </span>
-                    <span className={styles.optionText}>{user.name}</span>
+                    <span className={styles.optionText}>{user.email}</span>
                     <button
                       className={styles.assignButton}
                       onClick={() => handleSelect(user)}
