@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import styles from "../module-style/analytics.module.css";
+import { useGetAnalyticsQuery } from "../api";
 
 const Analytics = () => {
+  const { data, isLoading, error } = useGetAnalyticsQuery();
+  // console.log("data >>>>>>>>>", data);
+
   return (
     <div>
       <p>Analytics</p>
@@ -12,25 +16,25 @@ const Analytics = () => {
               <p>
                 <span></span>Backlog Tasks
               </p>
-              <p>16</p>
+              <p>{data?.analytics?.backlogCount || 0}</p>
             </div>
             <div className={styles.list}>
               <p>
                 <span></span>To-do Tasks
               </p>
-              <p>16</p>
+              <p>{data?.analytics?.todoCount || 0}</p>
             </div>
             <div className={styles.list}>
               <p>
                 <span></span>In-Progress Tasks
               </p>
-              <p>03</p>
+              <p>{data?.analytics?.progressCount || 0}</p>
             </div>
             <div className={styles.list}>
               <p>
                 <span></span>Completed Tasks
               </p>
-              <p>08</p>
+              <p>{data?.analytics?.doneCount || 0}</p>
             </div>
           </div>
         </div>
@@ -40,25 +44,25 @@ const Analytics = () => {
               <p>
                 <span></span>Low Priority
               </p>
-              <p>16</p>
+              <p>{data?.analytics?.lowPriorityCount || 0}</p>
             </div>
             <div className={styles.list}>
               <p>
                 <span></span>Moderate Priority
               </p>
-              <p>16</p>
+              <p>{data?.analytics?.moderatePriorityCount || 0}</p>
             </div>
             <div className={styles.list}>
               <p>
                 <span></span>High Priority
               </p>
-              <p>03</p>
+              <p>{data?.analytics?.highPriorityCount || 0}</p>
             </div>
             <div className={styles.list}>
               <p>
                 <span></span>Due Date Tasks
               </p>
-              <p>08</p>
+              <p>{data?.analytics?.dueDateCount || 0}</p>
             </div>
           </div>
         </div>

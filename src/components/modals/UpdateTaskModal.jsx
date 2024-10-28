@@ -1,20 +1,46 @@
-import React, { useState } from "react";
-import { useCreateTaskMutation } from "../../api";
-import styles from "../../module-style/createtask.module.css";
+import React, { useState, useEffect } from "react";
+import { useGetUsersQuery, useUpdateTaskMutation } from "../../api";
+import styles from "../../module-style/updatetask.module.css";
 import deleteIcon from "../../assets/icons/delete.svg";
 import addIcon from "../../assets/icons/add.svg";
 import toast from "react-hot-toast";
 
-const CreateTaskModal = ({ onClose }) => {
+const UpdateTaskModal = ({ taskData, onClose }) => {
+  const { data: usersData } = useGetUsersQuery();
   const [checklistItems, setChecklistItems] = useState([]);
   const [checkedCount, setCheckedCount] = useState(0);
   const [selectedDate, setSelectedDate] = useState("");
   const [priority, setPriority] = useState({ color: "", priority: "" });
-  const [assignedTo, setAssignedTo] = useState("");
+  const [assignedTo, setAssignedTo] = useState({});
   const [title, setTitle] = useState("");
   const [errors, setErrors] = useState({});
-  const [createTask] = useCreateTaskMutation();
+  const [updateTask] = useUpdateTaskMutation();
   const [isOpen, setIsOpen] = useState(false);
+  // console.log("usersData >>>>>>>>>>", usersData?.users);
+
+  useEffect(() => {
+    if (taskData) {
+      setTitle(taskData.title);
+      setChecklistItems(
+        taskData.checklist.map((item) => ({
+          id: item._id,
+          text: item.text,
+          isChecked: item.isChecked,
+        }))
+      );
+      setPriority({
+        priority: taskData.priority,
+        color:
+          taskData.priority === "high"
+            ? "#FF2473"
+            : taskData.priority === "moderate"
+            ? "#18B0FF"
+            : "#63C05B",
+      });
+      setSelectedDate(taskData.dueDate ? taskData.dueDate.split("T")[0] : "");
+      setAssignedTo(taskData.assignedTo);
+    }
+  }, [taskData]);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
   const handleSelect = (user) => {
@@ -58,7 +84,7 @@ const CreateTaskModal = ({ onClose }) => {
   };
 
   const handleClickOutsideModal = (e) => {
-    if (e.target.classList.contains(styles.container)) {
+    if (e.target.classList.contains(styles.upDatecontainer)) {
       onClose();
     }
   };
@@ -67,46 +93,38 @@ const CreateTaskModal = ({ onClose }) => {
     const newErrors = {};
     if (!title.trim()) newErrors.title = "Title is required.";
     if (!priority.priority) newErrors.priority = "Priority must be selected.";
-    if (checklistItems.length === 0) {
+    if (checklistItems.length === 0)
       newErrors.checklist = "At least one checklist item is required.";
-    } else {
-      const emptyChecklistItems = checklistItems.filter(
-        (item) => !item.text.trim()
-      );
-      if (emptyChecklistItems.length > 0) {
-        newErrors.checklist = "All checklist items must have text.";
-      }
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSaveTask = async () => {
+  const handleUpdateTask = async () => {
     if (!validateFields()) return;
 
-    const taskData = {
+    const updatedTaskData = {
+      id: taskData._id,
       title,
       checklist: checklistItems,
       priority: priority.priority,
       dueDate: selectedDate || null,
-      assignedTo: assignedTo || null,
+      assignedTo: assignedTo?.email || null,
     };
 
     try {
-      const res = await createTask(taskData).unwrap();
+      const res = await updateTask(updatedTaskData).unwrap();
       if (!res.error) {
-        toast.success(res?.message);
+        toast.success("task updated");
         onClose();
       }
-
-      onClose();
     } catch (error) {
-      console.error("Error creating task:", error);
+      toast.error("some error occured");
+      console.error("Error updating task:", error);
     }
   };
-  const users = [{ id: "1", name: "sri@gmail.com" }];
+
   return (
-    <div className={styles.container} onClick={handleClickOutsideModal}>
+    <div className={styles.upDatecontainer} onClick={handleClickOutsideModal}>
       <div className={styles.modal}>
         <div className={styles.title}>
           <label htmlFor="title">
@@ -174,27 +192,28 @@ const CreateTaskModal = ({ onClose }) => {
               onClick={toggleDropdown}
             >
               <div className={styles.customSelect}>
-                {assignedTo ? assignedTo.name : "Add a assignee"}
+                {assignedTo ? assignedTo.name : "Add an assignee"}
               </div>
               <div className={styles.customDropdown}>
-                {users.map((user) => (
-                  <div
-                    key={user.id}
-                    className={styles.dropdownOption}
-                    onClick={() => handleSelect(user)}
-                  >
-                    <span className={styles.iconBadge}>
-                      {user.name.slice(0, 2)}
-                    </span>
-                    <span className={styles.optionText}>{user.name}</span>
-                    <button
-                      className={styles.assignButton}
+                {usersData &&
+                  usersData?.users.map((user) => (
+                    <div
+                      key={user._id}
+                      className={styles.dropdownOption}
                       onClick={() => handleSelect(user)}
                     >
-                      Assign
-                    </button>
-                  </div>
-                ))}
+                      <span className={styles.iconBadge}>
+                        {user.email.slice(0, 2)}
+                      </span>
+                      <span className={styles.optionText}>{user.email}</span>
+                      <button
+                        className={styles.assignButton}
+                        onClick={() => handleSelect(user)}
+                      >
+                        Assign
+                      </button>
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
@@ -205,7 +224,7 @@ const CreateTaskModal = ({ onClose }) => {
             Checklist ({checkedCount}/{checklistItems.length}){" "}
             <span style={{ color: "red" }}>*</span>
           </p>
-          {checklistItems?.map((item) => (
+          {checklistItems.map((item) => (
             <div key={item.id} className={styles.checklistItem}>
               <input
                 type="checkbox"
@@ -250,8 +269,8 @@ const CreateTaskModal = ({ onClose }) => {
             <button className={styles.cancelBtn} onClick={onClose}>
               Cancel
             </button>
-            <button className={styles.saveBtn} onClick={handleSaveTask}>
-              Save
+            <button className={styles.saveBtn} onClick={handleUpdateTask}>
+              Update
             </button>
           </div>
         </div>
@@ -260,4 +279,4 @@ const CreateTaskModal = ({ onClose }) => {
   );
 };
 
-export default CreateTaskModal;
+export default UpdateTaskModal;

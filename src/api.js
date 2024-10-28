@@ -1,16 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-const baseUrl =
-  process.env.NODE_ENV === "production"
-    ? "https://taskmanager-rkqg.onrender.com"
-    : "http://localhost:3000";
+import { baseUrl } from "./utils/constants";
 
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers, { getState, endpoint }) => {
-      const token = getState().auth.token;
+      const token = getState().auth.token || localStorage.getItem("token");
 
       if (token && endpoint !== "registerUser" && endpoint !== "loginUser") {
         headers.set("Authorization", `Bearer ${token}`);
@@ -19,6 +15,7 @@ export const api = createApi({
       return headers;
     },
   }),
+  tagTypes: ["tasks"],
   endpoints: (builder) => ({
     registerUser: builder.mutation({
       query: (user) => ({
@@ -35,8 +32,8 @@ export const api = createApi({
       }),
     }),
     getUser: builder.query({
-      query: (id) => ({
-        url: `/auth/get/${id}`,
+      query: () => ({
+        url: `/auth/get`,
       }),
     }),
     updateUser: builder.mutation({
@@ -45,9 +42,10 @@ export const api = createApi({
         method: "PUT",
         body: user,
       }),
+      invalidatesTags: ["tasks"],
     }),
     getUsers: builder.query({
-      query: (id) => ({
+      query: () => ({
         url: `/auth/all`,
       }),
     }),
@@ -57,6 +55,34 @@ export const api = createApi({
         method: "POST",
         body: payload,
       }),
+      invalidatesTags: ["tasks"],
+    }),
+    getTasks: builder.query({
+      query: (query) => ({
+        url: `/task/all`,
+      }),
+      providesTags: ["tasks"],
+    }),
+    updateTask: builder.mutation({
+      query: (payload) => ({
+        url: `/task/${payload.id}`,
+        method: "PUT",
+        body: payload,
+      }),
+      invalidatesTags: ["tasks"],
+    }),
+    deleteTask: builder.mutation({
+      query: (payload) => ({
+        url: `/task/${payload.id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["tasks"],
+    }),
+    getAnalytics: builder.query({
+      query: () => ({
+        url: `/task/analytics`,
+      }),
+      providesTags: ["tasks"],
     }),
   }),
 });
@@ -64,6 +90,12 @@ export const api = createApi({
 export const {
   useRegisterUserMutation,
   useLoginUserMutation,
+  useGetUserQuery,
+  useGetUsersQuery,
   useUpdateUserMutation,
   useCreateTaskMutation,
+  useGetTasksQuery,
+  useUpdateTaskMutation,
+  useDeleteTaskMutation,
+  useGetAnalyticsQuery,
 } = api;
