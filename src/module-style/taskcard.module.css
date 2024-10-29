@@ -6,7 +6,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
-  padding: 2rem;
+  padding: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -43,6 +43,13 @@
 .threedots {
   cursor: pointer;
   position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.threedots:hover {
+  background-color: #cfcbcb;
 }
 
 .threedots span {
@@ -198,7 +205,7 @@ details[open] .accordionIcon {
 
 .actionsModal {
   position: absolute;
-  top: 10px;
+  top: 40px;
   right: 0;
   background-color: white;
   border: 1px solid #ddd;

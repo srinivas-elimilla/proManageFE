@@ -38,3 +38,8 @@ export const categories = {
     { label: "TO-DO", key: "todo" },
   ],
 };
+
+export const shareTaskUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://srinivas-pro-manager.vercel.app/"
+    : "http://localhost:5173/";

@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import styles from "../module-style/taskcard.module.css";
 import upArrow from "../assets/icons/upArrow.svg";
 import moment from "moment";
-import { baseUrl, categories, priorityColors } from "../utils/constants";
+import { shareTaskUrl, categories, priorityColors } from "../utils/constants";
 import { useDeleteTaskMutation, useUpdateTaskMutation } from "../api";
 import CommonModal from "../components/modals/CommonModal";
 import toast from "react-hot-toast";
 import { isDateCrossed } from "../utils/util";
 import UpdateTaskModal from "../components/modals/UpdateTaskModal";
+import copy from "copy-to-clipboard";
 
 const TaskCard = ({ tasks, arrowToggle }) => {
   const [updateCategory, { isLoading }] = useUpdateTaskMutation();
@@ -38,24 +39,9 @@ const TaskCard = ({ tasks, arrowToggle }) => {
   const closeModal = () => setEditModal(false);
 
   const handleShareTask = async (task) => {
-    if (!navigator.share) {
-      toast.error("sharing is not supported!");
-      return;
-    }
-
-    const shareData = {
-      title: task.title,
-      text: `Check out this task: ${task.title}`,
-      url: `${baseUrl}/${task._id}`,
-    };
-
-    try {
-      await navigator.share(shareData);
-      toast.success("Task shared successfully!");
-    } catch (error) {
-      toast.error("Error sharing task!");
-      console.log(error);
-    }
+    const url = `${shareTaskUrl}${task._id}`;
+    copy(url);
+    toast.success("Link copied");
   };
 
   if (isLoading) {
